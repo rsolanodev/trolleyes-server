@@ -25,7 +25,7 @@ public class GenericDao implements DaoInterface {
     public GenericDao(Connection oConnection, String ob, UsuarioBean oUsuarioBeanSession) {
         this.oConnection = oConnection;
         this.ob = ob;
-        //Sentencias SQL 
+
         this.strGetSQL = "SELECT * FROM " + ob + " WHERE id=? ";
         this.strSQL = "SELECT * FROM " + ob + " WHERE 1=1 ";
         this.strCountSQL = "SELECT COUNT(*) FROM " + ob + " WHERE 1=1 ";
@@ -107,7 +107,7 @@ public class GenericDao implements DaoInterface {
                 oPreparedStatement.setInt(++numparam, rpp);
                 oPreparedStatement.setInt(++numparam, offset);
             } else {
-                strSQL += " ORDER BY ? ";
+                strSQL += " ORDER BY " + oBean.getFieldOrder(orden) + " ";
                 if (direccion.equalsIgnoreCase("asc")) {
                     strSQL += "ASC ";
                 } else if (direccion.equalsIgnoreCase("desc")) {
@@ -115,7 +115,6 @@ public class GenericDao implements DaoInterface {
                 }
                 strSQL += "LIMIT ? OFFSET ?";
                 oPreparedStatement = oConnection.prepareStatement(strSQL);
-                oPreparedStatement.setString(++numparam, orden);
                 oPreparedStatement.setInt(++numparam, rpp);
                 oPreparedStatement.setInt(++numparam, offset);
             }

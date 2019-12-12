@@ -16,11 +16,11 @@ public class CompraDao_2 extends GenericDao implements DaoInterface {
     @Override
     public BeanInterface get(int id) throws Exception {
         strGetSQL = "SELECT compra.* FROM compra "
-            + "INNER JOIN factura ON "
-            + "factura.id = compra.factura_id "
-            + "INNER JOIN usuario ON usuario.id = factura.usuario_id "
-            + "WHERE compra.id = ? AND factura.usuario_id=" + oUsuarioBeanSession.getId();
-        
+                + "INNER JOIN factura ON "
+                + "factura.id = compra.factura_id "
+                + "INNER JOIN usuario ON usuario.id = factura.usuario_id "
+                + "WHERE compra.id = ? AND factura.usuario_id=" + oUsuarioBeanSession.getId();
+
         return super.get(id);
     }
 
@@ -37,7 +37,6 @@ public class CompraDao_2 extends GenericDao implements DaoInterface {
 
     @Override
     public ArrayList<BeanInterface> getPage(int page, int rpp, String orden, String direccion, String word, Integer id, String filter) throws Exception {
-        //strSQL += " AND WHERE factura_id = " + id;
         if (id == null) {
             strSQL = "SELECT compra.* FROM compra "
                     + "INNER JOIN factura ON "
