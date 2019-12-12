@@ -84,8 +84,6 @@ public class DaoFactory {
                     break;
                 }
                 break;
-            default:
-                throw new Exception("Error en Dao factory de " + ob);
         }
         return oDao;
     }

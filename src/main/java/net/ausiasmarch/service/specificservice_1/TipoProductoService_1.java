@@ -9,6 +9,7 @@ import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_1.TipoProductoDao_1;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.service.genericservice.GenericService;
 import net.ausiasmarch.service.serviceinterface.ServiceInterface;
 import net.ausiasmarch.setting.ConnectionSettings;
@@ -30,7 +31,7 @@ public class TipoProductoService_1 extends GenericService implements ServiceInte
             oConnectionImplementation = ConnectionFactory
                     .getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
-            TipoProductoDao_1 oTipoProductoDao = new TipoProductoDao_1(oConnection,ob, oUsuarioBeanSession);
+            TipoProductoDao_1 oTipoProductoDao = new TipoProductoDao_1(oConnection, ob, oUsuarioBeanSession);
             Gson oGson = GsonFactory.getGson();
             int numProd = Integer.parseInt(oRequest.getParameter("number"));
             for (int i = 0; i < numProd; i++) {
@@ -41,8 +42,9 @@ public class TipoProductoService_1 extends GenericService implements ServiceInte
             ResponseBean oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
             return oGson.toJson(oResponseBean);
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; fill method : error: " + ex.getMessage();
-            throw new Exception(msg, ex);
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+                Log4jHelper.errorLog(msg, ex);
+                throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();

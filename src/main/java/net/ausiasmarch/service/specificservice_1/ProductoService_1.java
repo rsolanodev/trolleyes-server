@@ -10,6 +10,7 @@ import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_1.ProductoDao_1;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.service.genericservice.GenericService;
 import net.ausiasmarch.service.serviceinterface.ServiceInterface;
 import net.ausiasmarch.setting.ConnectionSettings;
@@ -26,43 +27,44 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
     }
 
     public String fill() throws Exception {
-         ConnectionInterface oConnectionImplementation = null;
-         Connection oConnection = null;
-         ResponseBean oResponseBean = null;
-         Gson oGson = GsonFactory.getGson();
-        try{
-          oConnectionImplementation = ConnectionFactory
-                .getConnection(ConnectionSettings.connectionPool);
-         oConnection = oConnectionImplementation.newConnection();    
-        ProductoDao_1 oProductoDao = new ProductoDao_1(oConnection,ob,oUsuarioBeanSession);
-        int numProd = Integer.parseInt(oRequest.getParameter("number"));
-        for (int i = 0; i < numProd; i++) {
-            ProductoBean oProductoBean = new ProductoBean();
-            int numAleatorio = (int) Math.floor(Math.random() * (100000 - 999999) + 999999);
-            int numAleatorio1 = (int) Math.floor(Math.random() * (0 - 999) + 999);
-            double numAleatorio2 = (double) Math.random() * (0 - 999) + 999;
-            DecimalFormat format2 = new DecimalFormat("#,00");
-            double precioAleatorio = Double.parseDouble(format2.format(numAleatorio2));
-            int alTipoProducto_id = (int) Math.floor(Math.random() * 12) + 1;
-            oProductoBean.setCodigo(numAleatorio + "");
-            oProductoBean.setExistencias(numAleatorio1);
-            oProductoBean.setPrecio(precioAleatorio);
-            oProductoBean.setImagen(generaImages(1));
-            oProductoBean.setDescripcion(generaTexto(1));
-            oProductoBean.setTipo_producto_id(alTipoProducto_id);
-            oProductoDao.insert(oProductoBean);
-        }
-        oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
-         } catch (Exception ex) {
-                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+        ConnectionInterface oConnectionImplementation = null;
+        Connection oConnection = null;
+        ResponseBean oResponseBean = null;
+        Gson oGson = GsonFactory.getGson();
+        try {
+            oConnectionImplementation = ConnectionFactory
+                    .getConnection(ConnectionSettings.connectionPool);
+            oConnection = oConnectionImplementation.newConnection();
+            ProductoDao_1 oProductoDao = new ProductoDao_1(oConnection, ob, oUsuarioBeanSession);
+            int numProd = Integer.parseInt(oRequest.getParameter("number"));
+            for (int i = 0; i < numProd; i++) {
+                ProductoBean oProductoBean = new ProductoBean();
+                int numAleatorio = (int) Math.floor(Math.random() * (100000 - 999999) + 999999);
+                int numAleatorio1 = (int) Math.floor(Math.random() * (0 - 999) + 999);
+                double numAleatorio2 = (double) Math.random() * (0 - 999) + 999;
+                DecimalFormat format2 = new DecimalFormat("#,00");
+                double precioAleatorio = Double.parseDouble(format2.format(numAleatorio2));
+                int alTipoProducto_id = (int) Math.floor(Math.random() * 12) + 1;
+                oProductoBean.setCodigo(numAleatorio + "");
+                oProductoBean.setExistencias(numAleatorio1);
+                oProductoBean.setPrecio(precioAleatorio);
+                oProductoBean.setImagen(generaImages(1));
+                oProductoBean.setDescripcion(generaTexto(1));
+                oProductoBean.setTipo_producto_id(alTipoProducto_id);
+                oProductoDao.insert(oProductoBean);
+            }
+            oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
+        } catch (Exception ex) {
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+                Log4jHelper.errorLog(msg, ex);
                 throw new Exception(msg, ex);
-         } finally {
-                if (oConnection != null) {
-                    oConnection.close();
-                }
-                 if (oConnectionImplementation != null) {
-                    oConnectionImplementation.disposeConnection();
-                }
+        } finally {
+            if (oConnection != null) {
+                oConnection.close();
+            }
+            if (oConnectionImplementation != null) {
+                oConnectionImplementation.disposeConnection();
+            }
         }
         return oGson.toJson(oResponseBean);
     }
@@ -75,7 +77,7 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
         }
         return fraseRandom;
     }
-    
+
     private String generaImages(int longitud) {
         String imageRandom = "";
         for (int i = 0; i < longitud; i++) {

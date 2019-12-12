@@ -1,4 +1,3 @@
-
 package net.ausiasmarch.controller;
 
 import com.google.gson.Gson;
@@ -14,16 +13,18 @@ import net.ausiasmarch.bean.ResponseBean;
 import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.ServiceCall;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.setting.ConfigurationSettings;
 import net.ausiasmarch.setting.ConfigurationSettings.EnvironmentConstans;
 import net.ausiasmarch.setting.ConnectionSettings;
 
 public class Json extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ResponseBean oResponseBean = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -78,11 +79,15 @@ public class Json extends HttpServlet {
                         out.print(ex);
                         ex.printStackTrace();
                     } else {
-                        ResponseBean oResponseBean = new ResponseBean(500, "Trolleyes ERROR: Please contact your administrator");
+                        oResponseBean = new ResponseBean(500, "Trolleyes ERROR: Please contact your administrator");
                         Gson oGson = new Gson();
                         out.print(oGson.toJson(oResponseBean));
                     }
+                    Log4jHelper.errorLog(this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName(), ex);
+                    oResponseBean = new ResponseBean(500, "Object or Operation not found : Please contact your administrator");
                 }
+                response.setStatus(oResponseBean.getStatus());
+                out.print("{\"status\":" + oResponseBean.getStatus() + ", \"json\":" + oResponseBean.getMessage() + "}");
             }
         }
     }

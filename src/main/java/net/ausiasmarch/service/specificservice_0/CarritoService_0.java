@@ -13,6 +13,7 @@ import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_0.ProductoDao_0;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.setting.ConnectionSettings;
 
 public class CarritoService_0 {
@@ -22,21 +23,22 @@ public class CarritoService_0 {
     String ob = null;
     Gson oGson = GsonFactory.getGson();
     Connection oConnection = null;
-    
+
     public CarritoService_0(HttpServletRequest oRequest) {
         super();
         this.oRequest = oRequest;
         ob = oRequest.getParameter("ob");
     }
-     private Boolean checkPermission() throws Exception {
-        boolean check = false; 
+
+    private Boolean checkPermission() throws Exception {
+        boolean check = false;
         UsuarioBean oUsuarioBean = (UsuarioBean) oRequest.getSession().getAttribute("usuario");
         if (oUsuarioBean != null) {
             return check;
         }
         return check;
     }
-     
+
     public String add() throws Exception {
         @SuppressWarnings("unchecked")
         ItemBean oItemBean = null;
@@ -49,7 +51,7 @@ public class CarritoService_0 {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
             ProductoBean oProductoBean = new ProductoBean(id);
-            oProductoDao = new ProductoDao_0(oConnection,"producto", oUsuarioBeanSession);
+            oProductoDao = new ProductoDao_0(oConnection, "producto", oUsuarioBeanSession);
             oProductoBean = (ProductoBean) oProductoDao.get(id);
             if (oProductoBean != null) {
                 if (cantidad != 0) {
@@ -88,7 +90,8 @@ public class CarritoService_0 {
             }
 
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
@@ -111,7 +114,7 @@ public class CarritoService_0 {
         try {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
-            oProductoDao = new ProductoDao_0(oConnection,"producto",oUsuarioBeanSession);
+            oProductoDao = new ProductoDao_0(oConnection, "producto", oUsuarioBeanSession);
             oProductoBean = (ProductoBean) oProductoDao.get(id);
             if (oProductoBean != null) {
                 ArrayList<ItemBean> alCarrito = (ArrayList<ItemBean>) oSession.getAttribute("carrito");
@@ -138,7 +141,8 @@ public class CarritoService_0 {
                 oResponseBean = new ResponseBean(400, "El producto que quieres eliminar no existe");
             }
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {

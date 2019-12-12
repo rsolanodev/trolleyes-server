@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import net.ausiasmarch.bean.BeanInterface;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.factory.BeanFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.setting.ConfigurationSettings;
 
 public class GenericDao implements DaoInterface {
@@ -73,7 +74,8 @@ public class GenericDao implements DaoInterface {
                 return -1;
             }
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; getcount method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oResultSet != null) {
@@ -144,7 +146,8 @@ public class GenericDao implements DaoInterface {
                 listaBean.add(oBean);
             }
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; getPage method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oResultSet != null) {
@@ -172,7 +175,8 @@ public class GenericDao implements DaoInterface {
             oResultSet.next();
             iResult = oResultSet.getInt(1);
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; insert method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oResultSet != null) {
@@ -195,7 +199,8 @@ public class GenericDao implements DaoInterface {
             oPreparedStatement.setInt(1, id);
             iResult = oPreparedStatement.executeUpdate();
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; remove method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oPreparedStatement != null) {
@@ -216,7 +221,8 @@ public class GenericDao implements DaoInterface {
             oPreparedStatement = oBean.setFieldUpdate(oBeanParam, oPreparedStatement);
             iResult = oPreparedStatement.executeUpdate();
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; update method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oPreparedStatement != null) {

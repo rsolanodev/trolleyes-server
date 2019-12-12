@@ -9,15 +9,13 @@ import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_1.CompraDao_1;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.service.genericservice.GenericService;
 import net.ausiasmarch.service.serviceinterface.ServiceInterface;
 import net.ausiasmarch.setting.ConnectionSettings;
 
 public class CompraService_1 extends GenericService implements ServiceInterface {
 
-    String[] frasesInicio = {"El fin de la estructura ", "La agrupacion logica ", "El objetivo conjunto ",
-        "Una dinámica apropiada "};
-     
     public CompraService_1(HttpServletRequest oRequest) {
         super(oRequest);
         ob = oRequest.getParameter("ob");
@@ -37,7 +35,6 @@ public class CompraService_1 extends GenericService implements ServiceInterface 
         int numCompra = Integer.parseInt(oRequest.getParameter("number"));
         for (int i = 0; i < numCompra; i++) {
             CompraBean oCompraBean = new CompraBean();
-//          Date randomDate = new Date(ThreadLocalRandom.current().nextLong(date1.getTime(), date2.getTime()));
             int numAleatorio = (int) Math.floor(Math.random() * (1 - 50) + 50);
             int alProducto_id = (int) Math.floor(Math.random() * 25) + 1;
             int alFactura_id = (int) Math.floor(Math.random() * 25) + 1;
@@ -48,7 +45,8 @@ public class CompraService_1 extends GenericService implements ServiceInterface 
         }
         oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
           } catch (Exception ex) {
-                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+                Log4jHelper.errorLog(msg, ex);
                 throw new Exception(msg, ex);
          } finally {
                 if (oConnection != null) {
@@ -59,15 +57,5 @@ public class CompraService_1 extends GenericService implements ServiceInterface 
                 }
         }
         return oGson.toJson(oResponseBean);
-    }
-
-    private String generaTexto(int longitud) {
-        String fraseRandom = "";
-        for (int i = 0; i < longitud; i++) {
-            fraseRandom += frasesInicio[(int) (Math.random() * frasesInicio.length) + 0];
-//			fraseRandom += frasesMitad[(int) (Math.random() * frasesMitad.length) + 0];
-//			fraseRandom += frasesFinal[(int) (Math.random() * frasesFinal.length) + 0];
-        }
-        return fraseRandom;
     }
 }

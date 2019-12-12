@@ -10,28 +10,29 @@ import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_1.UsuarioDao_1;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.service.genericservice.GenericService;
 import net.ausiasmarch.service.serviceinterface.ServiceInterface;
 import net.ausiasmarch.setting.ConnectionSettings;
 
 public class UsuarioService_1 extends GenericService implements ServiceInterface {
-    
+
     Connection oConnection = null;
     ResponseBean oResponseBean = null;
     Gson oGson = GsonFactory.getGson();
     ConnectionInterface oConnectionImplementation = null;
     HttpSession oSession = oRequest.getSession();
-    
+
     public UsuarioService_1(HttpServletRequest oRequest) {
         super(oRequest);
-         ob = oRequest.getParameter("ob");
+        ob = oRequest.getParameter("ob");
     }
 
-    public String login() throws Exception {     
+    public String login() throws Exception {
         try {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
-            UsuarioDao_1 oUsuarioDao = new UsuarioDao_1(oConnection,ob,oUsuarioBeanSession);
+            UsuarioDao_1 oUsuarioDao = new UsuarioDao_1(oConnection, ob, oUsuarioBeanSession);
             UsuarioBean oUsuarioBean;
             String login = oRequest.getParameter("username");
             String password = oRequest.getParameter("password");
@@ -50,7 +51,8 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
 
             return oGson.toJson(oResponseBean);
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; login method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
@@ -68,8 +70,8 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
             oConnection = oConnectionImplementation.newConnection();
             UsuarioBean oUsuarioBean;
             oUsuarioBean = (UsuarioBean) oSession.getAttribute("usuario");
-            UsuarioDao_1 oUsuarioDao = new UsuarioDao_1(oConnection,ob,oUsuarioBeanSession);
-            
+            UsuarioDao_1 oUsuarioDao = new UsuarioDao_1(oConnection, ob, oUsuarioBeanSession);
+
             if (oUsuarioBean == null) {
                 oResponseBean = new ResponseBean(500, "No autorizado");
             } else {
@@ -78,7 +80,8 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
             }
 
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; check method ";
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
@@ -96,7 +99,7 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
         ResponseBean oResponseBean = new ResponseBean(200, "No active session");
         return oGson.toJson(oResponseBean);
     }
-  
+
     /*FILL*/
     String[] nombre = {"Marcel·li", "Pompeu", "Cirili", "Paco",
         "Josepa", "Vidal", "Domènec", "Maurici", "Eudald", "Miqueleta", "Bernat", "Jaumet", "Pepet"};
@@ -104,13 +107,13 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
         "dels", "de Can", "de les", "Ca la", "Pacoco"};
     String[] apellido2 = {"Pacoco", "Clapés",
         "Trencapins", "Palla", "Cargols", "Metge", "Murallot", "Porrons", "Cigrons", "Llobarro", "Faves", "Cebes", "Freda"};
-    
+
     public String fill() throws Exception {
         try {
             oConnectionImplementation = ConnectionFactory
                     .getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
-            UsuarioDao_1 oUsuarioDao = new UsuarioDao_1(oConnection,ob,oUsuarioBeanSession);
+            UsuarioDao_1 oUsuarioDao = new UsuarioDao_1(oConnection, ob, oUsuarioBeanSession);
 
             int numUsuario = Integer.parseInt(oRequest.getParameter("number"));
             for (int i = 0; i < numUsuario; i++) {
@@ -134,8 +137,9 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
             }
             oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + " ob: " + ob + "; check method ";
-            throw new Exception(msg, ex);
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+                Log4jHelper.errorLog(msg, ex);
+                throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();

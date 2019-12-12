@@ -20,6 +20,7 @@ import net.ausiasmarch.dao.specificdao_2.ProductoDao_2;
 import net.ausiasmarch.dao.specificdao_2.UsuarioDao_2;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
+import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.setting.ConnectionSettings;
 
 public class CarritoService_2 {
@@ -29,18 +30,18 @@ public class CarritoService_2 {
     String ob = null;
     Gson oGson = GsonFactory.getGson();
     Connection oConnection = null;
-  
 
     public CarritoService_2(HttpServletRequest oRequest) {
-         super();
+        super();
         this.oRequest = oRequest;
         ob = oRequest.getParameter("ob");
     }
-     private Boolean checkPermission() throws Exception {
+
+    private Boolean checkPermission() throws Exception {
         oUsuarioBeanSession = (UsuarioBean) oRequest.getSession().getAttribute("usuario");
         return oUsuarioBeanSession != null;
     }
-     
+
     public String add() throws Exception {
         HttpSession oSession = oRequest.getSession();
         int id = Integer.parseInt(oRequest.getParameter("id"));
@@ -48,13 +49,13 @@ public class CarritoService_2 {
         ProductoDao_2 oProductoDao;
         ConnectionInterface oConnectionImplementation = null;
         ResponseBean oResponseBean = null;
-         @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked")
         ItemBean oItemBean;
         try {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
             ProductoBean oProductoBean = new ProductoBean(id);
-            oProductoDao = new ProductoDao_2(oConnection,ob,oUsuarioBeanSession);
+            oProductoDao = new ProductoDao_2(oConnection, ob, oUsuarioBeanSession);
             oProductoBean = (ProductoBean) oProductoDao.get(id);
             if (oProductoBean != null) {
                 if (cantidad != 0) {
@@ -92,7 +93,8 @@ public class CarritoService_2 {
             }
 
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
@@ -115,7 +117,7 @@ public class CarritoService_2 {
         try {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
-            oProductoDao = new ProductoDao_2(oConnection,ob, oUsuarioBeanSession);
+            oProductoDao = new ProductoDao_2(oConnection, ob, oUsuarioBeanSession);
             oProductoBean = (ProductoBean) oProductoDao.get(id);
             if (oProductoBean != null) {
                 ArrayList<ItemBean> alCarrito = (ArrayList<ItemBean>) oSession.getAttribute("carrito");
@@ -142,7 +144,8 @@ public class CarritoService_2 {
                 oResponseBean = new ResponseBean(400, "El producto que quieres eliminar no existe");
             }
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
             throw new Exception(msg, ex);
         } finally {
             if (oConnection != null) {
@@ -156,24 +159,27 @@ public class CarritoService_2 {
     }
 
     public String list() throws Exception {
-          HttpSession oSession = oRequest.getSession();
+        HttpSession oSession = oRequest.getSession();
         try {
             @SuppressWarnings("unchecked")
             ArrayList<ItemBean> alCarrito = (ArrayList<ItemBean>) oSession.getAttribute("carrito");
             return "{\"status\":200,\"message\":" + oGson.toJson(alCarrito) + "}";
         } catch (Exception ex) {
-
-            return oGson.toJson(new ResponseBean(500, ex.getMessage()));
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
+            throw new Exception(msg, ex);
         }
     }
 
     public String empty() throws Exception {
-          HttpSession oSession = oRequest.getSession();
+        HttpSession oSession = oRequest.getSession();
         try {
             oSession.setAttribute("carrito", null);
             return oGson.toJson(new ResponseBean(200, "OK"));
         } catch (Exception ex) {
-            return oGson.toJson(new ResponseBean(500, ex.getMessage()));
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
+            throw new Exception(msg, ex);
         }
     }
 
@@ -196,8 +202,9 @@ public class CarritoService_2 {
         }
         return -1;
     }
+
     public String buy() throws Exception {
-         HttpSession oSession = oRequest.getSession();
+        HttpSession oSession = oRequest.getSession();
         ArrayList<ItemBean> alCarrito = (ArrayList) oSession.getAttribute("carrito");
         UsuarioBean oUsuarioBean = (UsuarioBean) oSession.getAttribute("usuario");
         ConnectionInterface oConnectionImplementation = null;
@@ -205,17 +212,17 @@ public class CarritoService_2 {
         try {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
             oConnection = oConnectionImplementation.newConnection();
-             if (this.checkPermission()) {
+            if (this.checkPermission()) {
                 if (alCarrito != null && alCarrito.size() > 0) {
-                    UsuarioDao_2 oUsuarioDao = new UsuarioDao_2(oConnection,"usuario",oUsuarioBeanSession);
+                    UsuarioDao_2 oUsuarioDao = new UsuarioDao_2(oConnection, "usuario", oUsuarioBeanSession);
                     oConnection.setAutoCommit(false);
                     //CREA FACTURA
                     FacturaBean oFacturaBean = new FacturaBean();
-                    ProductoDao_2 oProductoDao = new ProductoDao_2(oConnection,"producto",oUsuarioBeanSession);
+                    ProductoDao_2 oProductoDao = new ProductoDao_2(oConnection, "producto", oUsuarioBeanSession);
                     oFacturaBean.setUsuario_id(oUsuarioBean.getId());
                     oFacturaBean.setIva(21);
                     oFacturaBean.setFecha(Calendar.getInstance().getTime());
-                    FacturaDao_2 oFacturaDao = new FacturaDao_2(oConnection,"factura",oUsuarioBeanSession);
+                    FacturaDao_2 oFacturaDao = new FacturaDao_2(oConnection, "factura", oUsuarioBeanSession);
                     oFacturaBean.setId(oFacturaDao.insert(oFacturaBean));
                     //----------------------------------------------------                         
                     Iterator<ItemBean> iterator = alCarrito.iterator();
@@ -229,9 +236,9 @@ public class CarritoService_2 {
                             oCompraBean.setCantidad(oItemBean.getCantidad());
                             oCompraBean.setFactura_id(oFacturaBean.getId());
                             oCompraBean.setProducto_id(oProductoBean.getId());
-                            CompraDao_2 oCompraDao = new CompraDao_2(oConnection,"compra",oUsuarioBeanSession);
+                            CompraDao_2 oCompraDao = new CompraDao_2(oConnection, "compra", oUsuarioBeanSession);
                             oCompraDao.insert(oCompraBean);
-                            oCompraBean.setId(oCompraBean.getId());          
+                            oCompraBean.setId(oCompraBean.getId());
                             oProductoBean.setExistencias(oProductoBean.getExistencias() - oItemBean.getCantidad());
                             oProductoDao.update(oProductoBean);
                             oProductoDao.insert(oProductoBean);
