@@ -235,6 +235,9 @@ public class ServiceCall {
                             case "getpage":
                                 strResult = oProductoService.getPage();
                                 break;
+                            case "addimage":
+                                strResult = oProductoService.addImage();
+                                break;
                             default:
                                 strResult = "Operation doesn't exist";
                                 break;
