@@ -29,6 +29,36 @@ public class ProductoBean implements BeanInterface {
     private TipoProductoBean tipo_producto_obj;
     @Expose(deserialize = false)
     private Integer link_compra;
+    @Expose
+    private Boolean canCreate;
+    @Expose
+    private Boolean canUpdate;
+    @Expose
+    private Boolean canDelete;
+
+    public Boolean getCanCreate() {
+        return canCreate;
+    }
+
+    public void setCanCreate(Boolean canCreate) {
+        this.canCreate = canCreate;
+    }
+
+    public Boolean getCanUpdate() {
+        return canUpdate;
+    }
+
+    public void setCanUpdate(Boolean canUpdate) {
+        this.canUpdate = canUpdate;
+    }
+
+    public Boolean getCanDelete() {
+        return canDelete;
+    }
+
+    public void setCanDelete(Boolean canDelete) {
+        this.canDelete = canDelete;
+    }
 
     public Integer getLink_compra() {
         return link_compra;
@@ -37,7 +67,7 @@ public class ProductoBean implements BeanInterface {
     public void setLink_compra(Integer link_compra) {
         this.link_compra = link_compra;
     }
-    
+
     public ProductoBean() {
     }
 
@@ -112,7 +142,7 @@ public class ProductoBean implements BeanInterface {
     }
 
     @Override
-    public ProductoBean fill(ResultSet oResultSet, Connection oConnection, int spread,UsuarioBean oUsuarioBeanSession) throws Exception {
+    public ProductoBean fill(ResultSet oResultSet, Connection oConnection, int spread, UsuarioBean oUsuarioBeanSession) throws Exception {
         this.setId(oResultSet.getInt("id"));
         this.setCodigo(oResultSet.getString("codigo"));
         this.setExistencias(oResultSet.getInt("existencias"));
@@ -120,14 +150,19 @@ public class ProductoBean implements BeanInterface {
         this.setImagen(oResultSet.getString("imagen"));
         this.setDescripcion(oResultSet.getString("descripcion"));
         this.setTipo_producto_id(oResultSet.getInt("tipo_producto_id"));
-
-        CompraDao_1 oCompraDao = new CompraDao_1(oConnection,"compra",oUsuarioBeanSession);
+        this.setCanCreate(true);
+        this.setCanDelete(true);
+        CompraDao_1 oCompraDao = new CompraDao_1(oConnection, "compra", oUsuarioBeanSession);
+        if (this.link_compra > 0) {
+            this.setCanUpdate(false);
+        } else {
+            this.setCanUpdate(true);
+        }
         this.setLink_compra(oCompraDao.getCount(id, "producto"));
 
-        
         if (spread > 0) {
             spread--;
-            TipoProductoDao_1 oTipoProductoDao = new TipoProductoDao_1(oConnection,"tipo_producto", oUsuarioBeanSession);
+            TipoProductoDao_1 oTipoProductoDao = new TipoProductoDao_1(oConnection, "tipo_producto", oUsuarioBeanSession);
             TipoProductoBean oTipoProductoBean = new TipoProductoBean();
             oTipoProductoBean = (TipoProductoBean) oTipoProductoDao.get(this.tipo_producto_id);
             this.tipo_producto_obj = oTipoProductoBean;
@@ -169,24 +204,23 @@ public class ProductoBean implements BeanInterface {
 
     @Override
     public String getFieldConcat() {
-        
-        return getFieldFilter("codigo") +
-                getFieldFilter("existencias") + 
-                getFieldFilter("precio") + 
-                getFieldFilter("imagen") +
-                getFieldFilter("descripcion") +
-                getFieldFilter("tipo_producto_id");
-        
-        
+
+        return getFieldFilter("codigo")
+                + getFieldFilter("existencias")
+                + getFieldFilter("precio")
+                + getFieldFilter("imagen")
+                + getFieldFilter("descripcion")
+                + getFieldFilter("tipo_producto_id");
+
     }
+
     @Override
-    public PreparedStatement setFilter(int numparam,PreparedStatement oPreparedStatement,String word) throws SQLException{
-        for (int i=0;i<=numparam;i++){
-                            oPreparedStatement.setString(++numparam, word);
+    public PreparedStatement setFilter(int numparam, PreparedStatement oPreparedStatement, String word) throws SQLException {
+        for (int i = 0; i <= numparam; i++) {
+            oPreparedStatement.setString(++numparam, word);
         }
         return oPreparedStatement;
     }
-            
 
     @Override
     public PreparedStatement setFieldInsert(BeanInterface oBeanParam, PreparedStatement oPreparedStatement) throws Exception {
@@ -217,25 +251,25 @@ public class ProductoBean implements BeanInterface {
         oPreparedStatement.setInt(7, oProductoBean.getId());
         return oPreparedStatement;
     }
-    
+
     @Override
     public String getFieldLink() {
-       return "link_compra";
+        return "link_compra";
     }
-    
+
     @Override
     public String getFieldId(String filter) {
         return "tipo_producto_id";
     }
-    
+
     @Override
-    public PreparedStatement setFieldId(int numparam,PreparedStatement oPreparedStatement,int id) throws SQLException {
+    public PreparedStatement setFieldId(int numparam, PreparedStatement oPreparedStatement, int id) throws SQLException {
         // oPreparedStatement.setString(++numparam, filter);
         // oPreparedStatement.setString(++numparam, filter);
         oPreparedStatement.setInt(++numparam, id);
         return oPreparedStatement;
     }
-    
+
     @Override
     public String getFieldOrder(String orden) {
         return orden.matches("id|codigo|existencias|descripcion|precio") ? orden : null;
