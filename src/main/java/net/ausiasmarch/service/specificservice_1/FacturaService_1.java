@@ -44,6 +44,7 @@ public class FacturaService_1 extends GenericService implements ServiceInterface
                 oFacturaBean.setIva(21);
                 oFacturaBean.setFecha(randomDate);
                 oFacturaBean.setUsuario_id((int) (Math.random() * 25) + 2);
+                oFacturaBean.setCanDelete(true);
                 oFacturaDao.insert(oFacturaBean);
             }
             oResponseBean = new ResponseBean(200, "Insertados los registros con exito");

@@ -30,34 +30,14 @@ public class ProductoBean implements BeanInterface {
     @Expose(deserialize = false)
     private Integer link_compra;
     @Expose
-    private Boolean canCreate;
-    @Expose
-    private Boolean canUpdate;
-    @Expose
-    private Boolean canDelete;
-
-    public Boolean getCanCreate() {
-        return canCreate;
-    }
-
-    public void setCanCreate(Boolean canCreate) {
-        this.canCreate = canCreate;
-    }
-
-    public Boolean getCanUpdate() {
-        return canUpdate;
-    }
-
-    public void setCanUpdate(Boolean canUpdate) {
-        this.canUpdate = canUpdate;
-    }
+    private Boolean can_delete;
 
     public Boolean getCanDelete() {
-        return canDelete;
+        return can_delete;
     }
 
     public void setCanDelete(Boolean canDelete) {
-        this.canDelete = canDelete;
+        this.can_delete = canDelete;
     }
 
     public Integer getLink_compra() {
@@ -150,16 +130,13 @@ public class ProductoBean implements BeanInterface {
         this.setImagen(oResultSet.getString("imagen"));
         this.setDescripcion(oResultSet.getString("descripcion"));
         this.setTipo_producto_id(oResultSet.getInt("tipo_producto_id"));
-        this.setCanCreate(true);
-        this.setCanDelete(true);
         CompraDao_1 oCompraDao = new CompraDao_1(oConnection, "compra", oUsuarioBeanSession);
-        if (this.link_compra > 0) {
-            this.setCanUpdate(false);
-        } else {
-            this.setCanUpdate(true);
-        }
         this.setLink_compra(oCompraDao.getCount(id, "producto"));
-
+        if (this.getLink_compra() > 0) {
+            this.setCanDelete(false);
+        } else {
+            this.setCanDelete(true);
+        }
         if (spread > 0) {
             spread--;
             TipoProductoDao_1 oTipoProductoDao = new TipoProductoDao_1(oConnection, "tipo_producto", oUsuarioBeanSession);

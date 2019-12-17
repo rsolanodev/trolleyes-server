@@ -182,6 +182,9 @@ public class ServiceCall {
                             case "getpage":
                                 strResult = oFacturaService.getPage();
                                 break;
+                            case "fill":
+                                strResult = oFacturaService.fill();
+                                break;
                             default:
                                 strResult = "Operation doesn't exist";
                                 break;
@@ -189,7 +192,6 @@ public class ServiceCall {
                         break;
                     case "compra":
                         CompraService_1 oCompraService = new CompraService_1(oRequest);
-                        String pepe = oRequest.getParameter("idfactura");
                         switch (op) {
                             case "get":
                                 strResult = oCompraService.get();
@@ -208,6 +210,9 @@ public class ServiceCall {
                                 break;
                             case "getpage":
                                 strResult = oCompraService.getPage();
+                                break;
+                            case "fill":
+                                strResult = oCompraService.fill();
                                 break;
                             default:
                                 strResult = "Operation doesn't exist";
@@ -237,6 +242,9 @@ public class ServiceCall {
                                 break;
                             case "addimage":
                                 strResult = oProductoService.addImage();
+                                break;
+                            case "fill":
+                                strResult = oProductoService.fill();
                                 break;
                             default:
                                 strResult = "Operation doesn't exist";

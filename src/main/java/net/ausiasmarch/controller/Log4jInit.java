@@ -11,9 +11,10 @@ public class Log4jInit extends HttpServlet {
 
         String prefix = getServletContext().getRealPath("/");
         String file = getInitParameter("log4j-trolleyes");
+        String OS = System.getProperty("os.name").toLowerCase();
 
         if (file != null) {
-            PropertyConfigurator.configure(prefix + "\\" + file);
+            PropertyConfigurator.configure(OS.contains("win") ? prefix + "\\" + file : prefix + file);
             TraceHelper.trace("Log4J Logging started: " + prefix + file);
         } else {
             TraceHelper.trace("Log4J Is not configured for your Application: " + prefix + file);

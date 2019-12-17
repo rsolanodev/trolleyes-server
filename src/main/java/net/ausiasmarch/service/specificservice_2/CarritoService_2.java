@@ -216,7 +216,7 @@ public class CarritoService_2 {
                 if (alCarrito != null && alCarrito.size() > 0) {
                     UsuarioDao_2 oUsuarioDao = new UsuarioDao_2(oConnection, "usuario", oUsuarioBeanSession);
                     oConnection.setAutoCommit(false);
-                    //CREA FACTURA
+
                     FacturaBean oFacturaBean = new FacturaBean();
                     ProductoDao_2 oProductoDao = new ProductoDao_2(oConnection, "producto", oUsuarioBeanSession);
                     oFacturaBean.setUsuario_id(oUsuarioBean.getId());
@@ -224,13 +224,14 @@ public class CarritoService_2 {
                     oFacturaBean.setFecha(Calendar.getInstance().getTime());
                     FacturaDao_2 oFacturaDao = new FacturaDao_2(oConnection, "factura", oUsuarioBeanSession);
                     oFacturaBean.setId(oFacturaDao.insert(oFacturaBean));
-                    //----------------------------------------------------                         
+                    oFacturaBean.setCanDelete(true);
+                      
                     Iterator<ItemBean> iterator = alCarrito.iterator();
                     while (iterator.hasNext()) {
                         ItemBean oItemBean = iterator.next();
                         ProductoBean oProductoBean = oItemBean.getProducto_obj();
                         ProductoBean oProductoBeanDeDB = (ProductoBean) oProductoDao.get(oProductoBean.getId());
-                        //COMPRUEBA EXISTENCIAS Y CREA COMPRA
+
                         if (oProductoBeanDeDB.getExistencias() >= oItemBean.getCantidad()) {
                             CompraBean oCompraBean = new CompraBean();
                             oCompraBean.setCantidad(oItemBean.getCantidad());
@@ -238,10 +239,6 @@ public class CarritoService_2 {
                             oCompraBean.setProducto_id(oProductoBean.getId());
                             CompraDao_2 oCompraDao = new CompraDao_2(oConnection, "compra", oUsuarioBeanSession);
                             oCompraDao.insert(oCompraBean);
-                            oCompraBean.setId(oCompraBean.getId());
-                            oProductoBean.setExistencias(oProductoBean.getExistencias() - oItemBean.getCantidad());
-                            oProductoDao.update(oProductoBean);
-                            oProductoDao.insert(oProductoBean);
                             oResponseBean = new ResponseBean(200, "Se ha realizado la compra");
                         } else {
                             oResponseBean = new ResponseBean(400, "No hay suficientes existencias");

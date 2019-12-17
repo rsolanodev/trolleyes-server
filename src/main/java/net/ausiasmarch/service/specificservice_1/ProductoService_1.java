@@ -24,9 +24,9 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 public class ProductoService_1 extends GenericService implements ServiceInterface {
 
-    String[] frasesInicio = {"Maquina de ", "Interruptor para ", "Libro de ", "Bebida de  "};
-    String[] frasesFinal = {"emparejar. ", "montar tubos. ", "manzana. ", "dientes. "};
-    String[] imagesRandom = {"https://www.revistacambio.com.mx/wp-content/uploads/2019/10/istock-640143244-1-300x200.jpg", "http://www.entretantomagazine.com/wp-content/uploads/2018/02/salad-2756467_1920-300x200.jpg", "https://www.aimdigital.com.ar/wp-content/uploads/2018/07/alimentos-cifra-300x200.jpg", "https://blog.cofciudadreal.com/wp-content/uploads/2017/12/duck-2957809__340-300x200.jpg"};
+    String[] frasesInicio = {"Maquina de ", "Interruptor para ", "Libro de ", "Bebida de ", "Aparato para ", "Cámara para ", "Móvil de "};
+    String[] frasesFinal = {"emparejar. ", "montar tubos. ", "manzana. ", "dientes. ", "atascar.", "ciencia.", "reciclaje."};
+    String[] imagesRandom = {"31cOADT0vlL._AC_UL200_SR200,200_.jpg", "51kIRBGmYpL._AC_UL200_SR200,200_.jpg", "51zEzMWs2ML._AC_UL200_SR200,200_.jpg", "61aPU9DBjJL._AC_UL200_SR200,200_.jpg", "61BdJrjHYUL._AC_UL200_SR200,200_.jpg", "61fzPgcBEJL._AC_UL200_SR200,200_.jpg", "61GEYy8+oZL._AC_UL200_SR200,200_.jpg", "61TfDYcozuL._AC_UL200_SR200,200_.jpg", "61u48FEs0rL._AC_UL200_SR200,200_.jpg", "61w7p56ZZwL._AC_UL200_SR200,200_.jpg", "71bcYhnBDDL._AC_UL200_SR200,200_.jpg", "71JItuXbFxL._AC_UL200_SR200,200_.jpg", "71Sowz0FgwL._AC_UL200_SR200,200_.jpg", "71Ytf3okj+L._AC_UL200_SR200,200_.jpg", "81SQ2uQm8lL._AC_UL200_SR200,200_.jpg", "91fXXkecNIL._AC_UL200_SR200,200_.jpg"};
 
     public ProductoService_1(HttpServletRequest oRequest) {
         super(oRequest);
@@ -57,6 +57,7 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
                 oProductoBean.setPrecio(precioAleatorio);
                 oProductoBean.setImagen(generaImages(1));
                 oProductoBean.setDescripcion(generaTexto(1));
+                oProductoBean.setCanDelete(true);
                 oProductoBean.setTipo_producto_id(alTipoProducto_id);
                 oProductoDao.insert(oProductoBean);
             }
