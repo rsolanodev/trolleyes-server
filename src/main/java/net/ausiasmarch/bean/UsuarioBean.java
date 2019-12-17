@@ -239,7 +239,7 @@ public class UsuarioBean implements BeanInterface {
 
     @Override
     public String getFieldUpdate() {
-        return " dni=?,nombre=?,apellido1=?,apellido2=?,email=?,login=?,password=?,tipo_usuario_id=? ";
+        return " dni=?,nombre=?,apellido1=?,apellido2=?";
     }
 
     @Override
@@ -250,11 +250,7 @@ public class UsuarioBean implements BeanInterface {
         oPreparedStatement.setString(2, oUsuarioBean.getNombre());
         oPreparedStatement.setString(3, oUsuarioBean.getApellido1());
         oPreparedStatement.setString(4, oUsuarioBean.getApellido2());
-        oPreparedStatement.setString(5, oUsuarioBean.getEmail());
-        oPreparedStatement.setString(6, oUsuarioBean.getLogin());
-        oPreparedStatement.setString(7, oUsuarioBean.getPassword());
-        oPreparedStatement.setInt(8, oUsuarioBean.getTipo_usuario_id());
-        oPreparedStatement.setInt(9, oUsuarioBean.getId());
+        oPreparedStatement.setInt(5, oUsuarioBean.getId());
         return oPreparedStatement;
     }
 

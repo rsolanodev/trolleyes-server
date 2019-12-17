@@ -151,7 +151,7 @@ public class GenericService implements ServiceInterface {
 
     @Override
     public String update() throws Exception {
-        if (oUsuarioBeanSession.getTipo_usuario_obj().getId() == 1) {
+        if (oUsuarioBeanSession.getTipo_usuario_obj().getId() == 1 || ob.equalsIgnoreCase("usuario")) {
             HttpSession oSession = oRequest.getSession();
             if (oSession.getAttribute("usuario") != null) {
                 ConnectionInterface oConnectionImplementation = null;
