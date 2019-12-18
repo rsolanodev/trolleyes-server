@@ -9,6 +9,7 @@ import java.sql.Statement;
 import net.ausiasmarch.bean.BeanInterface;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.dao.genericdao.GenericDao;
+import net.ausiasmarch.exceptions.CustomException;
 import net.ausiasmarch.factory.BeanFactory;
 import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.setting.ConfigurationSettings;
@@ -19,7 +20,7 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
         super(oConnection, "usuario", oUsuarioBeanSession);
     }
 
-    public UsuarioBean get(String username, String password) throws Exception {
+    public UsuarioBean get(String username, String password) throws Exception, CustomException {
         strSQL += " AND login=?";
         strSQL += " AND password=?";
 
@@ -40,7 +41,7 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
         } catch (Exception ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -52,7 +53,7 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
         return oUsuarioBean;
     }
 
-    public UsuarioBean get(String username) throws Exception {
+    public UsuarioBean get(String username) throws Exception, CustomException {
         strSQL += " AND login=?";
         UsuarioBean oUsuarioBean;
         ResultSet oResultSet = null;
@@ -70,7 +71,7 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
         } catch (SQLException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -82,7 +83,7 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
         return oUsuarioBean;
     }
 
-    public int insert(String email, String username) throws Exception {
+    public int insert(String email, String username) throws Exception, CustomException {
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         int iResult = 0;
@@ -98,7 +99,7 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
         } catch (Exception ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();

@@ -23,6 +23,7 @@ import net.ausiasmarch.bean.ResponseBean;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_0.UsuarioDao_0;
+import net.ausiasmarch.exceptions.CustomException;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
 import net.ausiasmarch.helper.Log4jHelper;
@@ -47,7 +48,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
         ob = oRequest.getParameter("ob");
     }
 
-    public String login() throws Exception {
+    public String login() throws Exception, CustomException {
         ConnectionInterface oConnectionImplementation = null;
         UsuarioBean oUsuarioBean;
         String token = oRequest.getParameter("token");
@@ -109,7 +110,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
         } catch (Exception ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -126,7 +127,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
         return oGson.toJson(oResponseBean);
     }
 
-    public String check() throws Exception {
+    public String check() throws Exception, CustomException {
         ConnectionInterface oConnectionImplementation = null;
         try {
             oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
@@ -145,7 +146,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
         } catch (Exception ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();

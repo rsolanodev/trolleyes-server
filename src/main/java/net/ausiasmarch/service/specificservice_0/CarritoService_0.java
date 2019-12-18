@@ -11,6 +11,7 @@ import net.ausiasmarch.bean.ResponseBean;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_0.ProductoDao_0;
+import net.ausiasmarch.exceptions.CustomException;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
 import net.ausiasmarch.helper.Log4jHelper;
@@ -30,7 +31,7 @@ public class CarritoService_0 {
         ob = oRequest.getParameter("ob");
     }
 
-    private Boolean checkPermission() throws Exception {
+    private Boolean checkPermission() {
         boolean check = false;
         UsuarioBean oUsuarioBean = (UsuarioBean) oRequest.getSession().getAttribute("usuario");
         if (oUsuarioBean != null) {
@@ -39,7 +40,7 @@ public class CarritoService_0 {
         return check;
     }
 
-    public String add() throws Exception {
+    public String add() throws Exception, CustomException {
         @SuppressWarnings("unchecked")
         ItemBean oItemBean = null;
         int id = Integer.parseInt(oRequest.getParameter("id"));
@@ -92,7 +93,7 @@ public class CarritoService_0 {
         } catch (Exception ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -104,7 +105,7 @@ public class CarritoService_0 {
         return oGson.toJson(oResponseBean);
     }
 
-    public String remove() throws Exception {
+    public String remove() throws Exception, CustomException {
         int id = Integer.parseInt(oRequest.getParameter("id"));
         HttpSession oSession = oRequest.getSession();
         ConnectionInterface oConnectionImplementation = null;
@@ -143,7 +144,7 @@ public class CarritoService_0 {
         } catch (Exception ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new Exception(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -155,14 +156,13 @@ public class CarritoService_0 {
         return oGson.toJson(oResponseBean);
     }
 
-    public String list() throws Exception {
+    public String list() throws Exception, CustomException {
         try {
             HttpSession oSession = oRequest.getSession();
             @SuppressWarnings("unchecked")
             ArrayList<ItemBean> alCarrito = (ArrayList<ItemBean>) oSession.getAttribute("carrito");
             return "{\"status\":200,\"message\":" + oGson.toJson(alCarrito) + "}";
         } catch (Exception ex) {
-
             return oGson.toJson(new ResponseBean(500, ex.getMessage()));
         }
     }

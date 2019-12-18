@@ -11,6 +11,7 @@ import net.ausiasmarch.bean.ProductoBean;
 import net.ausiasmarch.bean.ResponseBean;
 import net.ausiasmarch.connection.ConnectionInterface;
 import net.ausiasmarch.dao.specificdao_1.ProductoDao_1;
+import net.ausiasmarch.exceptions.CustomException;
 import net.ausiasmarch.factory.ConnectionFactory;
 import net.ausiasmarch.factory.GsonFactory;
 import net.ausiasmarch.helper.Log4jHelper;
@@ -33,7 +34,7 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
         ob = oRequest.getParameter("ob");
     }
 
-    public String fill() throws Exception {
+    public String fill() throws Exception, CustomException {
         ConnectionInterface oConnectionImplementation = null;
         Connection oConnection = null;
         ResponseBean oResponseBean = null;
@@ -63,8 +64,9 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
             }
             oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
         } catch (Exception ex) {
-            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName();
-            throw new Exception(msg, ex);
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
+            throw new CustomException(500, msg, ex);
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -93,7 +95,7 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
         return imageRandom;
     }
 
-    public String addImage() throws Exception {
+    public String addImage() throws Exception, CustomException {
         ResponseBean oResponseBean = null;
         String name = "";
         HashMap<String, String> hash = new HashMap<>();
@@ -110,7 +112,9 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
                 }
                 oResponseBean = new ResponseBean(200, "La imagen se ha añadido correctamente.");
             } catch (FileUploadException ex) {
-                throw new Exception(ex);
+                String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+                Log4jHelper.errorLog(msg, ex);
+                throw new CustomException(500, msg, ex);
             }
         }
         Gson oGson = new Gson();

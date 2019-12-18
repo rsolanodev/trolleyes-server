@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import net.ausiasmarch.bean.BeanInterface;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.dao.genericdao.GenericDao;
+import net.ausiasmarch.exceptions.CustomException;
 
 public class CompraDao_2 extends GenericDao implements DaoInterface {
 
@@ -55,13 +56,13 @@ public class CompraDao_2 extends GenericDao implements DaoInterface {
     }
 
     @Override
-    public Integer remove(int id) throws Exception {
-        throw new Exception("Error en Dao remove de " + ob + ": No autorizado");
+    public Integer remove(int id) throws CustomException {
+        throw new CustomException(401, "Not authorized");
     }
 
     @Override
-    public Integer update(BeanInterface oBeanParam) throws Exception {
-        throw new Exception("Error en Dao update de " + ob + ": No autorizado");
+    public Integer update(BeanInterface oBeanParam) throws CustomException {
+        throw new CustomException(401, "Not authorized");
     }
 
 }

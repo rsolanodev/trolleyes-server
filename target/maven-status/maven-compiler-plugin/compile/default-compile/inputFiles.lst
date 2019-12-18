@@ -1,6 +1,7 @@
 C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\factory\ConnectionFactory.java
 C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\bean\CompraBean.java
 C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\dao\specificdao_2\TipoProductoDao_2.java
+C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\exceptions\CustomException.java
 C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\bean\UsuarioBean.java
 C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\dao\specificdao_2\ProductoDao_2.java
 C:\Users\Ruben\Documents\NetBeansProjects\trollEYES-server\src\main\java\net\ausiasmarch\connection\implementation\DBCPConnectionImplementation.java

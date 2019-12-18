@@ -50,6 +50,7 @@ net\ausiasmarch\bean\BeanInterface.class
 net\ausiasmarch\dao\specificdao_2\TipoProductoDao_2.class
 net\ausiasmarch\dao\specificdao_0\UsuarioDao_0.class
 net\ausiasmarch\dao\specificdao_1\FacturaDao_1.class
+net\ausiasmarch\exceptions\CustomException.class
 net\ausiasmarch\service\specificservice_2\ProductoService_2.class
 net\ausiasmarch\service\specificservice_1\TipoProductoService_1.class
 net\ausiasmarch\service\specificservice_1\UsuarioService_1.class
