@@ -5,14 +5,15 @@
  */
 package net.ausiasmarch.exceptions;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Ruben
  */
-public class CustomException extends Exception {
-
-    private Integer code;
-    private String description;
+public class CustomException extends RuntimeException {
+    private Integer code = 5000;
+    private ArrayList<String> description;
 
     public CustomException() {
         super();
@@ -21,13 +22,13 @@ public class CustomException extends Exception {
     public CustomException(Integer code, String description) {
         super(description);
         this.code = code;
-        this.description = description;
+        this.description.add(description);
     }
 
     public CustomException(Integer code, String description, Throwable cause) {
         super(description, cause);
         this.code = code;
-        this.description = description;
+        this.description.add(description);
     }
 
     public CustomException(Throwable cause) {
@@ -43,10 +44,10 @@ public class CustomException extends Exception {
     }
 
     public String getDescription() {
-        return description;
+        return description.toString();
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void addDescription(String description) {
+        this.description.add(description);
     }
 }

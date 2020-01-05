@@ -28,6 +28,10 @@ public class UsuarioBean implements BeanInterface {
     private String email;
     @Expose
     private String login;
+    @Expose
+    private String token;
+    @Expose
+    private Boolean active;
     @Expose(serialize = false)
     private String password;
     @Expose(serialize = false)
@@ -135,6 +139,22 @@ public class UsuarioBean implements BeanInterface {
         this.tipo_usuario_obj = tipo_usuario_obj;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     @Override
     public UsuarioBean fill(ResultSet oResultSet, Connection oConnection, int spread, UsuarioBean oUsuarioBeanSession) throws Exception {
         this.setId(oResultSet.getInt("id"));
@@ -146,6 +166,8 @@ public class UsuarioBean implements BeanInterface {
         this.setLogin(oResultSet.getString("login"));
         this.setPassword(oResultSet.getString("password"));
         this.setTipo_usuario_id(oResultSet.getInt("tipo_usuario_id"));
+        this.setActive(oResultSet.getBoolean("active"));
+        this.setToken(oResultSet.getString("token"));
 
         DaoInterface oFacturaDao = DaoFactory.getDao(oConnection, "factura", oUsuarioBeanSession);
         if (oFacturaDao != null) {

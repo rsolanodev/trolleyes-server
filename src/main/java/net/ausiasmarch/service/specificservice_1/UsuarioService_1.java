@@ -40,11 +40,11 @@ public class UsuarioService_1 extends GenericService implements ServiceInterface
             oUsuarioBean = oUsuarioDao.get(login, password);
 
             if (oUsuarioBean != null) {
-                if (oRequest.getParameter("username").equals(oUsuarioBean.getLogin()) && oRequest.getParameter("password").equalsIgnoreCase(oUsuarioBean.getPassword())) {
+                if (oRequest.getParameter("username").equals(oUsuarioBean.getLogin()) && oRequest.getParameter("password").equalsIgnoreCase(oUsuarioBean.getPassword()) && oUsuarioBean.getActive()) {
                     oSession.setAttribute("usuario", oRequest.getParameter("username"));
                     oResponseBean = new ResponseBean(200, "Welcome");
                 } else {
-                    oResponseBean = new ResponseBean(500, "Wrong password");
+                    oResponseBean = new ResponseBean(401, "Authentication failed");
                 }
             } else {
                 oResponseBean = new ResponseBean(500, "Wrong password");

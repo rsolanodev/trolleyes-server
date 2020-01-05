@@ -48,6 +48,12 @@ public class ServiceCall {
                             case "check":
                                 strResult = oUsuarioService.check();
                                 break;    
+                            case "signup":
+                                strResult = oUsuarioService.signup();
+                                break; 
+                            case "active":
+                                strResult = oUsuarioService.loginActive();
+                                break;
                             default:
                                 strResult = "Operation doesn't exist";
                                 break;
