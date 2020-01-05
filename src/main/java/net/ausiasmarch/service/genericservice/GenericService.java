@@ -49,10 +49,11 @@ public class GenericService implements ServiceInterface {
             BeanInterface oBean = oDao.get(id);
             strJson = oGson.toJson(oBean);
 
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -99,10 +100,11 @@ public class GenericService implements ServiceInterface {
             String strJson = null;
             strJson = oGson.toJson(alBean);
             return "{\"status\":200,\"message\":" + strJson + "}";
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -137,10 +139,11 @@ public class GenericService implements ServiceInterface {
                 oResponseBean = new ResponseBean(200, iCount.toString());
             }
             return oGson.toJson(oResponseBean);
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -171,10 +174,11 @@ public class GenericService implements ServiceInterface {
                         oResponseBean = new ResponseBean(200, "OK");
                     }
                     return oGson.toJson(oResponseBean);
-                } catch (Exception ex) {
+                } catch (CustomException ex) {
                     String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
                     Log4jHelper.errorLog(msg, ex);
-                    throw new CustomException(500, msg, ex);
+                    ex.addDescription(msg);
+                    throw ex;
                 } finally {
                     if (oConnection != null) {
                         oConnection.close();
@@ -214,10 +218,11 @@ public class GenericService implements ServiceInterface {
                     oResponseBean = new ResponseBean(200, "OK");
                 }
                 return oGson.toJson(oResponseBean);
-            } catch (Exception ex) {
+            } catch (CustomException ex) {
                 String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
                 Log4jHelper.errorLog(msg, ex);
-                throw new CustomException(500, msg, ex);
+                ex.addDescription(msg);
+                throw ex;
             } finally {
                 if (oConnection != null) {
                     oConnection.close();
@@ -251,10 +256,11 @@ public class GenericService implements ServiceInterface {
                     oResponseBean = new ResponseBean(200, "OK");
                 }
                 return oGson.toJson(oResponseBean);
-            } catch (Exception ex) {
+            } catch (CustomException ex) {
                 String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
                 Log4jHelper.errorLog(msg, ex);
-                throw new CustomException(500, msg, ex);
+                ex.addDescription(msg);
+                throw ex;
             } finally {
                 if (oConnection != null) {
                     oConnection.close();

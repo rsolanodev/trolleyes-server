@@ -45,10 +45,11 @@ public class CompraService_1 extends GenericService implements ServiceInterface 
                 oCompraDao.insert(oCompraBean);
             }
             oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();

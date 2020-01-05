@@ -42,10 +42,11 @@ public class TipoProductoService_1 extends GenericService implements ServiceInte
             }
             ResponseBean oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
             return oGson.toJson(oResponseBean);
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();

@@ -93,10 +93,11 @@ public class CarritoService_2 {
                 oResponseBean = new ResponseBean(400, "Este producto no esta almacenador en la tienda");
             }
 
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -144,10 +145,11 @@ public class CarritoService_2 {
             } else {
                 oResponseBean = new ResponseBean(400, "El producto que quieres eliminar no existe");
             }
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -165,10 +167,11 @@ public class CarritoService_2 {
             @SuppressWarnings("unchecked")
             ArrayList<ItemBean> alCarrito = (ArrayList<ItemBean>) oSession.getAttribute("carrito");
             return "{\"status\":200,\"message\":" + oGson.toJson(alCarrito) + "}";
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         }
     }
 
@@ -177,10 +180,11 @@ public class CarritoService_2 {
         try {
             oSession.setAttribute("carrito", null);
             return oGson.toJson(new ResponseBean(200, "OK"));
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         }
     }
 
@@ -254,11 +258,12 @@ public class CarritoService_2 {
             } else {
                 oResponseBean = new ResponseBean(400, "Regístrate para realizar la compra");
             }
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             oConnection.rollback();
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();

@@ -38,10 +38,11 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
             } else {
                 oUsuarioBean = null;
             }
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -68,10 +69,11 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
             } else {
                 oUsuarioBean = null;
             }
-        } catch (SQLException ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -96,10 +98,11 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
             oResultSet = oPreparedStatement.getGeneratedKeys();
             oResultSet.next();
             iResult = oResultSet.getInt(1);
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();

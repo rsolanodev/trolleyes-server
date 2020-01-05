@@ -63,10 +63,11 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
                 oProductoDao.insert(oProductoBean);
             }
             oResponseBean = new ResponseBean(200, "Insertados los registros con exito");
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oConnection != null) {
                 oConnection.close();
@@ -111,10 +112,11 @@ public class ProductoService_1 extends GenericService implements ServiceInterfac
                     }
                 }
                 oResponseBean = new ResponseBean(200, "La imagen se ha añadido correctamente.");
-            } catch (FileUploadException ex) {
+            } catch (CustomException ex) {
                 String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
                 Log4jHelper.errorLog(msg, ex);
-                throw new CustomException(500, msg, ex);
+                ex.addDescription(msg);
+                throw ex;
             }
         }
         Gson oGson = new Gson();

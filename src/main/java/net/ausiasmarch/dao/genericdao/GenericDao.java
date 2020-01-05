@@ -59,7 +59,7 @@ public class GenericDao implements DaoInterface {
     }
 
     @Override
-    public Integer getCount(Integer id, String filter) throws Exception, CustomException {
+    public Integer getCount(Integer id, String filter) throws Exception {
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         BeanInterface oBean = BeanFactory.getBean(ob);
@@ -74,10 +74,11 @@ public class GenericDao implements DaoInterface {
             } else {
                 return -1;
             }
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -146,10 +147,11 @@ public class GenericDao implements DaoInterface {
                 oBean = oBean.fill(oResultSet, oConnection, ConfigurationSettings.spread, oUsuarioBeanSession);
                 listaBean.add(oBean);
             }
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -175,10 +177,11 @@ public class GenericDao implements DaoInterface {
             oResultSet = oPreparedStatement.getGeneratedKeys();
             oResultSet.next();
             iResult = oResultSet.getInt(1);
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oResultSet != null) {
                 oResultSet.close();
@@ -199,10 +202,11 @@ public class GenericDao implements DaoInterface {
             oPreparedStatement = oConnection.prepareStatement(strSQL, Statement.RETURN_GENERATED_KEYS);
             oPreparedStatement.setInt(1, id);
             iResult = oPreparedStatement.executeUpdate();
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oPreparedStatement != null) {
                 oPreparedStatement.close();
@@ -221,10 +225,11 @@ public class GenericDao implements DaoInterface {
             oPreparedStatement = oConnection.prepareStatement(strSQL, Statement.RETURN_GENERATED_KEYS);
             oPreparedStatement = oBean.setFieldUpdate(oBeanParam, oPreparedStatement);
             iResult = oPreparedStatement.executeUpdate();
-        } catch (Exception ex) {
+        } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
             Log4jHelper.errorLog(msg, ex);
-            throw new CustomException(500, msg, ex);
+            ex.addDescription(msg);
+            throw ex;
         } finally {
             if (oPreparedStatement != null) {
                 oPreparedStatement.close();
