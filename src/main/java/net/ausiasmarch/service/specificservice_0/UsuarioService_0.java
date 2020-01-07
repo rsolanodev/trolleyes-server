@@ -8,16 +8,12 @@ package net.ausiasmarch.service.specificservice_0;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.apache.ApacheHttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.StringUtils;
 import com.google.gson.Gson;
 import java.sql.Connection;
 import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import net.ausiasmarch.bean.ResponseBean;
 import net.ausiasmarch.bean.UsuarioBean;
@@ -34,7 +30,7 @@ import net.ausiasmarch.setting.ConnectionSettings;
 
 /**
  *
- * @author alejandro
+ * @author Ruben
  */
 public class UsuarioService_0 extends GenericService implements ServiceInterface {
 

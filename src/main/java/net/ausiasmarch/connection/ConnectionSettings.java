@@ -7,7 +7,7 @@ package net.ausiasmarch.connection;
 
 /**
  *
- * @author raznara
+ * @author Ruben
  */
 public class ConnectionSettings {
 

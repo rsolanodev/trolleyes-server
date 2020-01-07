@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author raznara
+ * @author Ruben
  */
 public class BoneCPImplementation implements ConnectionInterface{
 

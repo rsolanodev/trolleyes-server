@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 05-01-2020 a las 15:45:50
--- Versión del servidor: 5.7.26
--- Versión de PHP: 7.2.18
+-- Servidor: localhost:3306
+-- Tiempo de generación: 06-01-2020 a las 23:58:16
+-- Versión del servidor: 8.0.17
+-- Versión de PHP: 7.3.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -28,16 +28,12 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `compra`
 --
 
-DROP TABLE IF EXISTS `compra`;
-CREATE TABLE IF NOT EXISTS `compra` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `compra` (
+  `id` int(11) NOT NULL,
   `cantidad` int(10) NOT NULL,
   `factura_id` int(11) NOT NULL,
-  `producto_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`factura_id`,`producto_id`),
-  KEY `fk_compra_factura_idx` (`factura_id`),
-  KEY `fk_compra_producto_idx` (`producto_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=225 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `producto_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `compra`
@@ -258,7 +254,12 @@ INSERT INTO `compra` (`id`, `cantidad`, `factura_id`, `producto_id`) VALUES
 (221, 4, 112, 93),
 (222, 6, 112, 86),
 (223, 4, 112, 90),
-(224, 4, 112, 96);
+(224, 4, 112, 96),
+(225, 2, 113, 97),
+(226, 2, 113, 94),
+(227, 1, 113, 93),
+(228, 1, 113, 95),
+(229, 1, 113, 96);
 
 -- --------------------------------------------------------
 
@@ -266,15 +267,12 @@ INSERT INTO `compra` (`id`, `cantidad`, `factura_id`, `producto_id`) VALUES
 -- Estructura de tabla para la tabla `factura`
 --
 
-DROP TABLE IF EXISTS `factura`;
-CREATE TABLE IF NOT EXISTS `factura` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `factura` (
+  `id` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `iva` int(3) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`usuario_id`),
-  KEY `fk_factura_usuario_idx` (`usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `usuario_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `factura`
@@ -383,7 +381,8 @@ INSERT INTO `factura` (`id`, `fecha`, `iva`, `usuario_id`) VALUES
 (100, '2014-10-06', 21, 25),
 (110, '2019-12-17', 21, 2),
 (111, '2019-12-17', 21, 153),
-(112, '2019-12-27', 21, 153);
+(112, '2019-12-27', 21, 153),
+(113, '2020-01-07', 21, 176);
 
 -- --------------------------------------------------------
 
@@ -391,18 +390,15 @@ INSERT INTO `factura` (`id`, `fecha`, `iva`, `usuario_id`) VALUES
 -- Estructura de tabla para la tabla `producto`
 --
 
-DROP TABLE IF EXISTS `producto`;
-CREATE TABLE IF NOT EXISTS `producto` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `codigo` varchar(255) CHARACTER SET utf8 NOT NULL,
+CREATE TABLE `producto` (
+  `id` int(11) NOT NULL,
+  `codigo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `existencias` int(10) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `imagen` varchar(512) CHARACTER SET utf8 NOT NULL,
-  `descripcion` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `tipo_producto_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`tipo_producto_id`),
-  KEY `fk_producto_tipo_producto_idx` (`tipo_producto_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `imagen` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `tipo_producto_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `producto`
@@ -506,12 +502,10 @@ INSERT INTO `producto` (`id`, `codigo`, `existencias`, `precio`, `imagen`, `desc
 -- Estructura de tabla para la tabla `tipo_producto`
 --
 
-DROP TABLE IF EXISTS `tipo_producto`;
-CREATE TABLE IF NOT EXISTS `tipo_producto` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(255) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `tipo_producto` (
+  `id` int(11) NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `tipo_producto`
@@ -625,12 +619,10 @@ INSERT INTO `tipo_producto` (`id`, `descripcion`) VALUES
 -- Estructura de tabla para la tabla `tipo_usuario`
 --
 
-DROP TABLE IF EXISTS `tipo_usuario`;
-CREATE TABLE IF NOT EXISTS `tipo_usuario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(255) CHARACTER SET utf8 NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+CREATE TABLE `tipo_usuario` (
+  `id` int(11) NOT NULL,
+  `descripcion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `tipo_usuario`
@@ -646,22 +638,19 @@ INSERT INTO `tipo_usuario` (`id`, `descripcion`) VALUES
 -- Estructura de tabla para la tabla `usuario`
 --
 
-DROP TABLE IF EXISTS `usuario`;
-CREATE TABLE IF NOT EXISTS `usuario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `dni` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
-  `nombre` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `apellido1` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `apellido2` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
-  `login` varchar(255) CHARACTER SET utf8 NOT NULL,
-  `password` varchar(512) CHARACTER SET utf8 DEFAULT NULL,
-  `email` varchar(255) CHARACTER SET utf8 NOT NULL,
+CREATE TABLE `usuario` (
+  `id` int(11) NOT NULL,
+  `dni` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `nombre` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `apellido1` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `apellido2` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `login` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `tipo_usuario_id` int(11) NOT NULL,
-  `token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`,`tipo_usuario_id`),
-  KEY `fk_usuario_tipo_usuario_idx` (`tipo_usuario_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `active` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
@@ -670,7 +659,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 INSERT INTO `usuario` (`id`, `dni`, `nombre`, `apellido1`, `apellido2`, `login`, `password`, `email`, `tipo_usuario_id`, `token`, `active`) VALUES
 (1, '12345678A', 'Troll', 'Eyes', 'Daw', 'trolleyes', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'troll@eyes.com', 1, '', 1),
 (2, '30380657O', 'Marcel·li', 'de les', 'Palla', 'madepa5597', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'madepa5597@trolleyes.com', 2, '', 1),
-(3, '74207971O', 'Marcel·li', 'de la', 'Llobarros', 'madell4582', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'madell4582@trolleyes.com', 2, '', 0),
+(3, '74207971O', 'Marcel·li', 'de la', 'Llobarros', 'madell4582', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'madell4582@trolleyes.com', 2, '', 1),
 (4, '33315126O', 'Maurici', 'dels', 'Murallot', 'mademu8479', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'mademu8479@trolleyes.com', 2, '', 0),
 (5, '42548227O', 'Cirili', 'Ca la', 'Palla', 'cicapa9140', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'cicapa9140@trolleyes.com', 2, '', 0),
 (6, '30420869O', 'Pepet', 'dels', 'Clapés', 'pedecl9073', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'pedecl9073@trolleyes.com', 2, '', 0),
@@ -818,7 +807,93 @@ INSERT INTO `usuario` (`id`, `dni`, `nombre`, `apellido1`, `apellido2`, `login`,
 (148, '77639751O', 'Domènec', 'Pacoco', 'Faves', 'dopafa7478', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'dopafa7478@trolleyes.com', 2, '', 0),
 (149, '98245637O', 'Marcel·li', 'Pacoco', 'Palla', 'mapapa8613', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'mapapa8613@trolleyes.com', 2, '', 0),
 (150, '58053984O', 'Eudald', 'de les', 'Faves', 'eudefa1808', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'eudefa1808@trolleyes.com', 2, '', 0),
-(151, '15389997O', 'Bernat', 'de les', 'Metge', 'bedeme2561', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'bedeme2561@trolleyes.com', 2, '', 0);
+(151, '15389997O', 'Bernat', 'de les', 'Metge', 'bedeme2561', 'da8ab09ab4889c6208116a675cad0b13e335943bd7fc418782d054b32fdfba04', 'bedeme2561@trolleyes.com', 2, '', 0),
+(176, '3357031H', 'Rubén', 'Solano', 'Jiménez', 'rsolano', NULL, 'rsolano@dekalabs.com', 2, NULL, NULL);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `compra`
+--
+ALTER TABLE `compra`
+  ADD PRIMARY KEY (`id`,`factura_id`,`producto_id`),
+  ADD KEY `fk_compra_factura_idx` (`factura_id`),
+  ADD KEY `fk_compra_producto_idx` (`producto_id`);
+
+--
+-- Indices de la tabla `factura`
+--
+ALTER TABLE `factura`
+  ADD PRIMARY KEY (`id`,`usuario_id`),
+  ADD KEY `fk_factura_usuario_idx` (`usuario_id`);
+
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`id`,`tipo_producto_id`),
+  ADD KEY `fk_producto_tipo_producto_idx` (`tipo_producto_id`);
+
+--
+-- Indices de la tabla `tipo_producto`
+--
+ALTER TABLE `tipo_producto`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `tipo_usuario`
+--
+ALTER TABLE `tipo_usuario`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`,`tipo_usuario_id`),
+  ADD KEY `fk_usuario_tipo_usuario_idx` (`tipo_usuario_id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `compra`
+--
+ALTER TABLE `compra`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=230;
+
+--
+-- AUTO_INCREMENT de la tabla `factura`
+--
+ALTER TABLE `factura`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=114;
+
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_producto`
+--
+ALTER TABLE `tipo_producto`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_usuario`
+--
+ALTER TABLE `tipo_usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- Restricciones para tablas volcadas
