@@ -230,7 +230,7 @@ public class CarritoService_2 {
                     FacturaDao_2 oFacturaDao = new FacturaDao_2(oConnection, "factura", oUsuarioBeanSession);
                     oFacturaBean.setId(oFacturaDao.insert(oFacturaBean));
                     oFacturaBean.setCanDelete(true);
-                      
+
                     Iterator<ItemBean> iterator = alCarrito.iterator();
                     while (iterator.hasNext()) {
                         ItemBean oItemBean = iterator.next();
@@ -244,6 +244,9 @@ public class CarritoService_2 {
                             oCompraBean.setProducto_id(oProductoBean.getId());
                             CompraDao_2 oCompraDao = new CompraDao_2(oConnection, "compra", oUsuarioBeanSession);
                             oCompraDao.insert(oCompraBean);
+                            oCompraBean.setId(oCompraBean.getId());
+                            oProductoBean.setExistencias(oProductoBean.getExistencias() - oItemBean.getCantidad());
+                            oProductoDao.update(oProductoBean);
                             oResponseBean = new ResponseBean(200, "Se ha realizado la compra");
                         } else {
                             oResponseBean = new ResponseBean(400, "No hay suficientes existencias");

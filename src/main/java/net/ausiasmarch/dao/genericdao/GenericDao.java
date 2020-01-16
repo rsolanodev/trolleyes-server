@@ -4,8 +4,11 @@ import net.ausiasmarch.dao.daointerface.DaoInterface;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.ausiasmarch.bean.BeanInterface;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.exceptions.CustomException;
@@ -44,16 +47,25 @@ public class GenericDao implements DaoInterface {
         PreparedStatement oPreparedStatement = null;
         ResultSet oResultSet = null;
         BeanInterface oBean = null;
-
-        oPreparedStatement = oConnection.prepareStatement(strGetSQL);
-        oPreparedStatement.setInt(1, id);
-        oResultSet = oPreparedStatement.executeQuery();
-
-        if (oResultSet.next()) {
-            oBean = BeanFactory.getBean(ob);
-            oBean = oBean.fill(oResultSet, oConnection, ConfigurationSettings.spread, oUsuarioBeanSession);
-        } else {
-            oBean = null;
+        try {
+            oPreparedStatement = oConnection.prepareStatement(strGetSQL);
+            oPreparedStatement.setInt(1, id);
+            oResultSet = oPreparedStatement.executeQuery();
+            if (oResultSet.next()) {
+                oBean = BeanFactory.getBean(ob);
+                oBean = oBean.fill(oResultSet, oConnection, ConfigurationSettings.spread, oUsuarioBeanSession);
+            } else {
+                oBean = null;
+            }
+        } catch (Exception ex) {
+            throw ex;
+        } finally {
+            if (oResultSet != null) {
+                oResultSet.close();
+            }
+            if (oPreparedStatement != null) {
+                oPreparedStatement.close();
+            }
         }
         return oBean;
     }
@@ -104,6 +116,7 @@ public class GenericDao implements DaoInterface {
                 offset = (rpp * page) - rpp;
             }
             int numparam = 0;
+
             //Condicion de ordenar
             if (orden == null) {
                 strSQL += " LIMIT ? OFFSET ?";
@@ -122,6 +135,7 @@ public class GenericDao implements DaoInterface {
                 oPreparedStatement.setInt(++numparam, rpp);
                 oPreparedStatement.setInt(++numparam, offset);
             }
+
             //Condicion de busqueda
             numparam = 0;
             if (word != null) {
@@ -130,6 +144,7 @@ public class GenericDao implements DaoInterface {
                 oPreparedStatement = oBean.setFilter(numparam, oPreparedStatement, word);
 
             }
+
             //Condicion de filtro de objeto
             if (id != null && filter != null) {
                 if (idSessionUser == 1) {

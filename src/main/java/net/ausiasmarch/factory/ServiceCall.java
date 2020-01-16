@@ -2,7 +2,6 @@ package net.ausiasmarch.factory;
 
 import javax.servlet.http.HttpServletRequest;
 import net.ausiasmarch.bean.UsuarioBean;
-import net.ausiasmarch.service.genericservice.GenericService;
 import net.ausiasmarch.service.specificservice_0.CarritoService_0;
 import net.ausiasmarch.service.specificservice_0.ProductoService_0;
 import net.ausiasmarch.service.specificservice_0.UsuarioService_0;
@@ -53,6 +52,9 @@ public class ServiceCall {
                                 break; 
                             case "active":
                                 strResult = oUsuarioService.loginActive();
+                                break;
+                            case "restore":
+                                strResult = oUsuarioService.restorePassword();
                                 break;
                             default:
                                 strResult = "Operation doesn't exist";

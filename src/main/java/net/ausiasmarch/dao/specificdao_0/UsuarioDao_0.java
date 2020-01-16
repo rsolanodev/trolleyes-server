@@ -4,13 +4,10 @@ import net.ausiasmarch.dao.daointerface.DaoInterface;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import net.ausiasmarch.bean.BeanInterface;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.dao.genericdao.GenericDao;
 import net.ausiasmarch.exceptions.CustomException;
-import net.ausiasmarch.factory.BeanFactory;
 import net.ausiasmarch.helper.Log4jHelper;
 import net.ausiasmarch.setting.ConfigurationSettings;
 
@@ -154,6 +151,32 @@ public class UsuarioDao_0 extends GenericDao implements DaoInterface {
             String strsql = "UPDATE " + ob + " SET active=true WHERE login=?";
             oPreparedStatement = oConnection.prepareStatement(strsql);
             oPreparedStatement.setString(1, login);
+            iResult = oPreparedStatement.executeUpdate();
+        } catch (CustomException ex) {
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
+            ex.addDescription(msg);
+            throw ex;
+        } finally {
+            if (oResultSet != null) {
+                oResultSet.close();
+            }
+            if (oPreparedStatement != null) {
+                oPreparedStatement.close();
+            }
+        }
+        return iResult;
+    }
+
+    public int changePassword(String login, String password) throws Exception {
+        ResultSet oResultSet = null;
+        PreparedStatement oPreparedStatement = null;
+        int iResult = 0;
+        try {
+            String strsql = "UPDATE " + ob + " SET password=? WHERE login=?";
+            oPreparedStatement = oConnection.prepareStatement(strsql);
+            oPreparedStatement.setString(1, password);
+            oPreparedStatement.setString(2, login);
             iResult = oPreparedStatement.executeUpdate();
         } catch (CustomException ex) {
             String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;

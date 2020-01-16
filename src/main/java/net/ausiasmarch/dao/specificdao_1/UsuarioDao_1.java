@@ -4,7 +4,6 @@ import net.ausiasmarch.dao.daointerface.DaoInterface;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import net.ausiasmarch.bean.UsuarioBean;
 import net.ausiasmarch.dao.genericdao.GenericDao;
 import net.ausiasmarch.exceptions.CustomException;
@@ -16,7 +15,7 @@ public class UsuarioDao_1 extends GenericDao implements DaoInterface {
     public UsuarioDao_1(Connection oConnection, String ob, UsuarioBean oUsuarioBeanSession) {
         super(oConnection, "usuario", oUsuarioBeanSession);
     }
-
+         
     public UsuarioBean get(String username, String password) throws Exception, CustomException {
         strSQL += " AND login=?";
         strSQL += " AND password=?";

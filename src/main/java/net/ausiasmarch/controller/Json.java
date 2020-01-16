@@ -76,8 +76,8 @@ public class Json extends HttpServlet {
                     out.print(ServiceCall.executeService(request));
                 } catch (Exception ex) {
                     if (ConfigurationSettings.environment == EnvironmentConstans.Debug) {
-                        out.print(ex);
-                        ex.printStackTrace();
+                        System.out.print(ex);
+                        ex.printStackTrace(System.out);
                     } else {
                         oResponseBean = new ResponseBean(500, "Trolleyes ERROR: Please contact your administrator");
                         Gson oGson = new Gson();

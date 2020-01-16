@@ -171,18 +171,22 @@ public class UsuarioBean implements BeanInterface {
 
         DaoInterface oFacturaDao = DaoFactory.getDao(oConnection, "factura", oUsuarioBeanSession);
         if (oFacturaDao != null) {
-            if (oFacturaDao.getClass() == FacturaDao_1.class) {
-                FacturaDao_1 oFacturaDao_1 = (FacturaDao_1) oFacturaDao;
-                this.setLink_factura(oFacturaDao_1.getCount(id, "usuario"));
-            } else {
-                FacturaDao_2 oFacturaDao_2 = (FacturaDao_2) oFacturaDao;
-                this.setLink_factura(oFacturaDao_2.getCount(id, "usuario"));
-            }
+            this.setLink_factura(oFacturaDao.getCount(id, "usuario"));
+//            if (oFacturaDao.getClass() == FacturaDao_1.class) {
+//                FacturaDao_1 oFacturaDao_1 = (FacturaDao_1) oFacturaDao;
+//                this.setLink_factura(oFacturaDao_1.getCount(id, "usuario"));
+//            } else {
+//                FacturaDao_2 oFacturaDao_2 = (FacturaDao_2) oFacturaDao;
+//                this.setLink_factura(oFacturaDao_2.getCount(id, "usuario"));
+//            }
         }
 
         if (spread > 0) {
             spread--;
             TipoUsuarioDao_1 oTipoUsuarioDao = new TipoUsuarioDao_1(oConnection, "tipo_usuario", oUsuarioBeanSession);
+            
+            //DaoInterface oTipoUsuarioDao=DaoFactory.getDao(oConnection, "tipo_usuario", oUsuarioBeanSession);
+                        
             TipoUsuarioBean oTipoUsuarioBean;
             oTipoUsuarioBean = (TipoUsuarioBean) oTipoUsuarioDao.get(this.tipo_usuario_id);
             this.tipo_usuario_obj = oTipoUsuarioBean;

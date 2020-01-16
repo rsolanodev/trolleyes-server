@@ -124,11 +124,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
         }
     }
 
-    public String logout() {
-        oRequest.getSession().invalidate();
-        ResponseBean oResponseBean = new ResponseBean(200, "No active session");
-        return oGson.toJson(oResponseBean);
-    }
+
 
     public String check() throws Exception, CustomException {
         ConnectionInterface oConnectionImplementation = null;
@@ -180,7 +176,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
             String token = oUsuarioBean.getToken();
             String email = oRequest.getParameter("email");
             String username = oRequest.getParameter("username");
-            String emailText = "<div style='font-family: sans-serif'><p style='font-size: 32px'>Hola, <u style='color: rgb(16, 108, 200)'>@" + username + "</u></p><br/><p style='font-size: 30px'><b>¡Bienvenido a la tienda online de TrollEyes!</b></p><p style='font-size: 24px'>Para continuar con el registro de su cuenta necesitamos que realice la validación accediendo al siguiente enlace <span style='color: rgb(16, 108, 200)'>http://localhost/trolleyes/validate?token=" + token + "&s43d=" + username + "&hf43=" + oUsuarioBean.getPassword() + "</span></p><br/><p style='font-size: 18px'>Si no has solicitado el registro, puedes ignorar este correo.</p></div>";
+            String emailText = "<div style='font-family: sans-serif'><p style='font-size: 32px'>Hola, <u style='color: rgb(16, 108, 200)'>@" + username + "</u></p><br/><p style='font-size: 30px'><b>¡Bienvenido a la tienda online de TrollEyes!</b></p><p style='font-size: 24px'>Para continuar con el registro de su cuenta necesitamos que realice la validación accediendo al siguiente enlace <span style='color: rgb(16, 108, 200)'>http://localhost/trolleyes/validate?token=" + token + "&s43d=" + username + "</span></p><br/><p style='font-size: 18px'>Si no has solicitado el registro, puedes ignorar este correo.</p></div>";
             if (oUsuarioDao.register(oUsuarioBean) == 0) {
                 oResponseBean = new ResponseBean(500, "KO");
             } else {
@@ -220,8 +216,7 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
 
             UsuarioDao_0 oUsuarioDao = new UsuarioDao_0(oConnection, "usuario", oUsuarioBeanSession);
             String login = oRequest.getParameter("8j94");
-            String password = oRequest.getParameter("9m72");
-            oUsuarioBean = oUsuarioDao.get(login, password);
+            oUsuarioBean = oUsuarioDao.get(login);
 
             if (oUsuarioBean == null) {
                 oResponseBean = new ResponseBean(401, "Authentication Failed");
@@ -247,4 +242,49 @@ public class UsuarioService_0 extends GenericService implements ServiceInterface
         }
         return oGson.toJson(oResponseBean);
     }
+
+    public String restorePassword() throws Exception {
+        ConnectionInterface oConnectionImplementation = null;
+        UsuarioBean oUsuarioBean;
+        String login = oRequest.getParameter("login");
+        String token = oRequest.getParameter("token");
+        try {
+
+            oConnectionImplementation = ConnectionFactory.getConnection(ConnectionSettings.connectionPool);
+            oConnection = oConnectionImplementation.newConnection();
+
+            UsuarioDao_0 oUsuarioDao = new UsuarioDao_0(oConnection, "usuario", oUsuarioBeanSession);
+            oUsuarioBean = oUsuarioDao.get(login);
+
+            if (oUsuarioBean == null) {
+                oResponseBean = new ResponseBean(401, "Authentication Failed");
+            } else {
+                if (token == null) {
+                    String emailText = "<div style='font-family: sans-serif'><p style='font-size: 32px'>Hola, <u style='color: rgb(16, 108, 200)'>@" + oUsuarioBean.getLogin() + "</u></p><br/><p style='font-size: 30px'><b>¡Has solicitado un cambio de contraseña!</b></p><p style='font-size: 24px'>Para continuar con la restauración de su contraseña debe acceder al siguiente enlace para asignar las nuevas credenciales <span style='color: rgb(16, 108, 200)'>http://localhost/trolleyes/restore-password?token=" + oUsuarioBean.getToken() + "&login=" + oUsuarioBean.getLogin() + "</span></p><br/><p style='font-size: 18px'>Si no has solicitado el cambio de contraseña, puedes ignorar este correo.</p></div>";
+                    EmailHelper.sendEmail("trolleyesclient@gmail.com", oUsuarioBean.getEmail(), "trolleyes1234", "Cambio de contraseña en tu cuenta de Trolleyes", emailText);
+                    oResponseBean = new ResponseBean(200, "Correo electrónico enviado con éxito.");
+                } else {
+                    if (oUsuarioBean.getToken().equals(token) && oUsuarioDao.changePassword(login, oRequest.getParameter("password")) != 0) {
+                        oResponseBean = new ResponseBean(200, "User password changed successfully");
+                    } else {
+                        oResponseBean = new ResponseBean(400, "Error token");
+                    }
+                }
+            }
+        } catch (CustomException ex) {
+            String msg = this.getClass().getName() + ":" + (ex.getStackTrace()[0]).getMethodName() + " ob:" + ob;
+            Log4jHelper.errorLog(msg, ex);
+            ex.addDescription(msg);
+            throw ex;
+        } finally {
+            if (oConnection != null) {
+                oConnection.close();
+            }
+            if (oConnectionImplementation != null) {
+                oConnectionImplementation.disposeConnection();
+            }
+        }
+        return oGson.toJson(oResponseBean);
+    }
+
 }
